@@ -73,6 +73,17 @@ impl zed::Extension for WebComponentsExtension {
         })
     }
 
+    fn language_server_initialization_options(
+        &mut self,
+        server_id: &LanguageServerId,
+        worktree: &zed::Worktree,
+    ) -> Result<Option<zed::serde_json::Value>> {
+        let initialization_options = LspSettings::for_worktree(server_id.as_ref(), worktree)
+            .ok()
+            .and_then(|lsp_settings| lsp_settings.initialization_options.clone());
+        Ok(initialization_options)
+    }
+
     fn language_server_workspace_configuration(
         &mut self,
         server_id: &LanguageServerId,
