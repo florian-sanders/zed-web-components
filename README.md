@@ -21,14 +21,22 @@ Settings and configuration tweaks are explained in detail in the [wc-language-se
 
 In your global or local settings, enable the language server by adding a `wc-language-server` section in the `lsp` section.
 
+**Important:** The language server requires the TypeScript SDK path to be configured in `initialization_options`. The `tsdk` path must point to the `lib` directory that contains `typescript.js` from your TypeScript installation.
+
 Settings can be passed to the LSP server by adding a `settings` section inside `wc-language-server`.
 
 For instance:
+
 ```json
 // settings.json
 {
   "lsp": {
     "wc-language-server": {
+      "initialization_options": {
+        "typescript": {
+          "tsdk": "/path/to/typescript/lib"
+        }
+      },
       "settings": {
         "webComponents": {
           "diagnostics": {
@@ -44,6 +52,12 @@ For instance:
   }
 }
 ```
+
+To find your TypeScript `lib` directory (the one containing `typescript.js`):
+- **Local project**: `node_modules/typescript/lib`
+- **Global npm**: Run `npm list -g typescript` to locate the installation, then append `/lib`
+- **Nix**: `/nix/store/.../typescript-.../lib/node_modules/typescript/lib`
+- **macOS/Homebrew**: `/usr/local/lib/node_modules/typescript/lib`
 
 ### Custom Elements Manifest
 
@@ -62,6 +76,7 @@ export default {
 ### Supported Languages
 
 The extension provides language server support for:
+
 - **HTML**: Custom element validation and completion
 - **JavaScript**: Web Components class definitions
 - **TypeScript**: Web Components with type checking
@@ -69,6 +84,7 @@ The extension provides language server support for:
 ### Framework Support
 
 The language server works with any Web Components framework that generates a Custom Elements Manifest, including:
+
 - Lit
 - Stencil
 - FAST
@@ -128,13 +144,12 @@ The language server works with any Web Components framework that generates a Cus
   "languages": {
     "HTML": {
       "language_servers": ["wc-language-server"],
-      "format_on_save": "on"
     },
     "JavaScript": {
-      "language_servers": ["wc-language-server", "typescript-language-server"]
+      "language_servers": ["wc-language-server", ...]
     },
     "TypeScript": {
-      "language_servers": ["wc-language-server", "typescript-language-server"]
+      "language_servers": ["wc-language-server", ...]
     }
   }
 }
